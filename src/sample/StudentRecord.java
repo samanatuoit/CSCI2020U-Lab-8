@@ -16,21 +16,21 @@ public class StudentRecord {
         calcMarks();
     }
     private void calcMarks() {
-        finalMark = ((0.2f * assignment) + (0.3f * midterm) + (0.5f * finalExam));
+        this.finalMark = ((0.2f * assignment) + (0.3f * midterm) + (0.5f * finalExam));
     }
     public String getSID () {
-        return SID;
+        return this.SID;
     }
     public float getAssignment() {
-        return assignment;
+        return this.assignment;
     }
     public float getMidterm() {
-        return midterm;
+        return this.midterm;
     }
     public float getFinalExam() {
-        return finalExam;
+        return this.finalExam;
     }
     public float getFinalMark() {
-        return finalMark;
+        return this.finalMark;
     }
 }
