@@ -14,9 +14,9 @@ public class StudentRecord {
         this.midterm = midterm;
         this.finalExam = finalExam;
 
-        calcMarks();
+        calcLetterGrade();
     }
-    private void calcMarks() {
+    private void calcLetterGrade() {
         this.finalMark = ((0.2f * assignment) + (0.3f * midterm) + (0.5f * finalExam));
         if (finalMark >= 80 && finalMark <= 100) {
             this.letterGrade = "A";

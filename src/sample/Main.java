@@ -1,6 +1,9 @@
 package sample;
 
 import javafx.application.Application;
+import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -79,6 +82,25 @@ public class Main extends Application {
         addPane.add(finalExamLbl, 2, 1);
         addPane.add(finalExamFld, 3, 1);
         addPane.add(addBtn, 1, 3);
+
+        addBtn.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                String SID = sidFld.getText();
+                float assignment = Float.parseFloat(assignFld.getText());
+                float midterm = Float.parseFloat(midtermFld.getText());
+                float finalExam = Float.parseFloat(finalExamFld.getText());
+
+                table.getItems().add(new StudentRecord(SID, assignment, midterm, finalExam));
+
+                sidFld.setText("");
+                assignFld.setText("");
+                midtermFld.setText("");
+                finalExamFld.setText("");
+
+
+            }
+        });
 
 
 
