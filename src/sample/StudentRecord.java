@@ -6,6 +6,7 @@ public class StudentRecord {
     protected float midterm;
     protected float finalExam;
     protected float finalMark;
+    protected String letterGrade;
 
     public StudentRecord(String SID, float assignment, float midterm, float finalExam) {
         this.SID = SID;
@@ -17,6 +18,24 @@ public class StudentRecord {
     }
     private void calcMarks() {
         this.finalMark = ((0.2f * assignment) + (0.3f * midterm) + (0.5f * finalExam));
+        if (finalMark >= 80 && finalMark <= 100) {
+            this.letterGrade = "A";
+        }
+        else if (finalMark >= 70 && finalMark <= 79) {
+            this.letterGrade = "B";
+        }
+        else if (finalMark >= 60 && finalMark <= 69) {
+            this.letterGrade = "C";
+        }
+        else if (finalMark >= 50 && finalMark <= 59) {
+            this.letterGrade = "D";
+        }
+        else if (finalMark >= 0 && finalMark <= 49) {
+            this.letterGrade = "F";
+        }
+        else {
+            this.letterGrade = "Invalid";
+        }
     }
     public String getSID () {
         return this.SID;
@@ -32,5 +51,8 @@ public class StudentRecord {
     }
     public float getFinalMark() {
         return this.finalMark;
+    }
+    public String getLetterGrade() {
+        return this.letterGrade;
     }
 }
