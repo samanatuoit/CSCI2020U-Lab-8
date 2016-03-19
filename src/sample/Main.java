@@ -12,6 +12,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import java.io.*;
@@ -21,6 +22,17 @@ public class Main extends Application {
     private BorderPane layout;
     private TableView<StudentRecord> table;
     private File currentFilename;
+
+    private void saveAs(Stage primaryStage) {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Save Student Records file");
+        fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("CSV Files", "*.csv"));
+        currentFilename = fileChooser.showSaveDialog(primaryStage);
+        if (currentFilename != null) {
+            save();
+        }
+
+    }
 
     private void save() {
         try {
@@ -38,32 +50,41 @@ public class Main extends Application {
         }
     }
 
-    private void load() {
-        String SID;
-        float assignment = 0;
-        float midterm = 0;
-        float finalExam = 0;
-        ObservableList<StudentRecord> marks = FXCollections.observableArrayList();
+    private void load(Stage primaryStage) {
 
-        try {
-            BufferedReader in = new BufferedReader(new FileReader(currentFilename));
-            String line;
-            while ((line = in.readLine()) != null) {
-                String[] data = line.split(",");
-                SID = data[0];
-                assignment = Float.parseFloat(data[1]);
-                midterm = Float.parseFloat(data[2]);
-                finalExam = Float.parseFloat(data[3]);
-                //table.getItems().add(new StudentRecord(SID, assignment, midterm, finalExam));
-                //table.setItems(new StudentRecord(SID, assignment, midterm, finalExam));
-                marks.add(new StudentRecord(SID, assignment, midterm, finalExam));
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Open Student Records file");
+        fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("CSV Files", "*.csv"));
+        currentFilename = fileChooser.showOpenDialog(primaryStage);
+        if (currentFilename != null) {
+            String SID;
+            float assignment = 0;
+            float midterm = 0;
+            float finalExam = 0;
+            ObservableList<StudentRecord> marks = FXCollections.observableArrayList();
+
+            try {
+                BufferedReader in = new BufferedReader(new FileReader(currentFilename));
+                String line;
+                while ((line = in.readLine()) != null) {
+                    String[] data = line.split(",");
+                    SID = data[0];
+                    assignment = Float.parseFloat(data[1]);
+                    midterm = Float.parseFloat(data[2]);
+                    finalExam = Float.parseFloat(data[3]);
+                    marks.add(new StudentRecord(SID, assignment, midterm, finalExam));
+                }
+                table.setItems(marks);
+
+
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-            table.setItems(marks);
 
 
-        } catch (IOException e) {
-            e.printStackTrace();
         }
+
+
     }
 
     @Override
@@ -79,12 +100,13 @@ public class Main extends Application {
         newMenuItem.setOnAction(evt -> table.setItems(null));
         MenuItem openMenuItem = new MenuItem("Open");
         fileMenu.getItems().add(openMenuItem);
-        openMenuItem.setOnAction(evt -> load());
+        openMenuItem.setOnAction(evt -> load(primaryStage));
         MenuItem saveMenuItem = new MenuItem("Save");
         fileMenu.getItems().add(saveMenuItem);
         saveMenuItem.setOnAction(evt -> save());
         MenuItem saveAsMenuItem = new MenuItem("Save As");
         fileMenu.getItems().add(saveAsMenuItem);
+        saveAsMenuItem.setOnAction(evt -> saveAs(primaryStage));
         MenuItem exitMenuItem = new MenuItem("Exit");
         fileMenu.getItems().add(exitMenuItem);
         exitMenuItem.setOnAction(evt -> System.exit(0));
@@ -131,6 +153,8 @@ public class Main extends Application {
 
 
 
+
+
         /* GridPane fng a new student */
         Label sidLbl = new Label("SID: ");
         TextField sidFld = new TextField();
@@ -164,6 +188,11 @@ public class Main extends Application {
                 float midterm = Float.parseFloat(midtermFld.getText());
                 float finalExam = Float.parseFloat(finalExamFld.getText());
 
+                if (table.getItems() == null) {
+                    ObservableList<StudentRecord> marks = FXCollections.observableArrayList();
+                    table.setItems(marks);
+                }
+
                 table.getItems().add(new StudentRecord(SID, assignment, midterm, finalExam));
 
                 sidFld.setText("");
@@ -177,13 +206,12 @@ public class Main extends Application {
 
 
 
-
-
         layout = new BorderPane();
         layout.setTop(menuBar);
         layout.setCenter(table);
         layout.setBottom(addPane);
-        primaryStage.setScene(new Scene(layout, 600, 400));
+        Scene scene = new Scene(layout, 600, 400);
+        primaryStage.setScene(scene);
         primaryStage.show();
     }
 
