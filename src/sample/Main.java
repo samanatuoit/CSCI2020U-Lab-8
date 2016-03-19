@@ -1,6 +1,7 @@
 package sample;
 
 import javafx.application.Application;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -35,9 +36,34 @@ public class Main extends Application {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private void load() {
+        String SID;
+        float assignment = 0;
+        float midterm = 0;
+        float finalExam = 0;
+        ObservableList<StudentRecord> marks = FXCollections.observableArrayList();
+
+        try {
+            BufferedReader in = new BufferedReader(new FileReader(currentFilename));
+            String line;
+            while ((line = in.readLine()) != null) {
+                String[] data = line.split(",");
+                SID = data[0];
+                assignment = Float.parseFloat(data[1]);
+                midterm = Float.parseFloat(data[2]);
+                finalExam = Float.parseFloat(data[3]);
+                //table.getItems().add(new StudentRecord(SID, assignment, midterm, finalExam));
+                //table.setItems(new StudentRecord(SID, assignment, midterm, finalExam));
+                marks.add(new StudentRecord(SID, assignment, midterm, finalExam));
+            }
+            table.setItems(marks);
 
 
-
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -51,7 +77,9 @@ public class Main extends Application {
         MenuItem newMenuItem = new MenuItem("New");
         fileMenu.getItems().add(newMenuItem);
         newMenuItem.setOnAction(evt -> table.setItems(null));
-        fileMenu.getItems().add(new MenuItem("Open"));
+        MenuItem openMenuItem = new MenuItem("Open");
+        fileMenu.getItems().add(openMenuItem);
+        openMenuItem.setOnAction(evt -> load());
         MenuItem saveMenuItem = new MenuItem("Save");
         fileMenu.getItems().add(saveMenuItem);
         saveMenuItem.setOnAction(evt -> save());
