@@ -13,26 +13,58 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
+import java.io.*;
+import java.util.Iterator;
+
 public class Main extends Application {
     private BorderPane layout;
     private TableView<StudentRecord> table;
+    private File currentFilename;
+
+    private void save() {
+        try {
+            PrintWriter fout = new PrintWriter(currentFilename);
+            ObservableList<StudentRecord> mylist = table.getItems();
+            for (StudentRecord studentRecord : mylist) {
+                fout.println(studentRecord.SID + "," + studentRecord.assignment + "," + studentRecord.midterm + ","
+                        + studentRecord.finalExam);
+                System.out.println(studentRecord.SID + "," + studentRecord.assignment + "," + studentRecord.midterm + ","
+                        + studentRecord.finalExam);
+            }
+            fout.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+
+    }
 
     @Override
     public void start(Stage primaryStage) throws Exception{
         //Parent root = FXMLLoader.load(getClass().getResource("sample.fxml"));
         primaryStage.setTitle("Lab 08");
+        currentFilename = new File("test.csv");
 
+        // File menu
         Menu fileMenu = new Menu("File");
-        fileMenu.getItems().add(new MenuItem("New"));
+        MenuItem newMenuItem = new MenuItem("New");
+        fileMenu.getItems().add(newMenuItem);
+        newMenuItem.setOnAction(evt -> table.setItems(null));
         fileMenu.getItems().add(new MenuItem("Open"));
-        fileMenu.getItems().add(new MenuItem("Save"));
-        fileMenu.getItems().add(new MenuItem("Save As"));
-        fileMenu.getItems().add(new MenuItem("Exit"));
+        MenuItem saveMenuItem = new MenuItem("Save");
+        fileMenu.getItems().add(saveMenuItem);
+        saveMenuItem.setOnAction(evt -> save());
+        MenuItem saveAsMenuItem = new MenuItem("Save As");
+        fileMenu.getItems().add(saveAsMenuItem);
+        MenuItem exitMenuItem = new MenuItem("Exit");
+        fileMenu.getItems().add(exitMenuItem);
+        exitMenuItem.setOnAction(evt -> System.exit(0));
 
 
         MenuBar menuBar = new MenuBar();
         menuBar.getMenus().add(fileMenu);
-        
+
         table = new TableView<>();
         table.setItems(DataSource.getAllMarks());
 
@@ -67,6 +99,8 @@ public class Main extends Application {
         table.getColumns().add(finalExamColumn);
         table.getColumns().add(finalMarkColumn);
         table.getColumns().add(letterGradeColumn);
+
+
 
 
         /* GridPane fng a new student */
