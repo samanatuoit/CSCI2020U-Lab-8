@@ -22,6 +22,17 @@ public class Main extends Application {
         //Parent root = FXMLLoader.load(getClass().getResource("sample.fxml"));
         primaryStage.setTitle("Lab 08");
 
+        Menu fileMenu = new Menu("File");
+        fileMenu.getItems().add(new MenuItem("New"));
+        fileMenu.getItems().add(new MenuItem("Open"));
+        fileMenu.getItems().add(new MenuItem("Save"));
+        fileMenu.getItems().add(new MenuItem("Save As"));
+        fileMenu.getItems().add(new MenuItem("Exit"));
+
+
+        MenuBar menuBar = new MenuBar();
+        menuBar.getMenus().add(fileMenu);
+        
         table = new TableView<>();
         table.setItems(DataSource.getAllMarks());
 
@@ -107,8 +118,9 @@ public class Main extends Application {
 
 
         layout = new BorderPane();
-        layout.setBottom(addPane);
+        layout.setTop(menuBar);
         layout.setCenter(table);
+        layout.setBottom(addPane);
         primaryStage.setScene(new Scene(layout, 600, 400));
         primaryStage.show();
     }
