@@ -20,7 +20,7 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception{
         //Parent root = FXMLLoader.load(getClass().getResource("sample.fxml"));
-        primaryStage.setTitle("Lab 05");
+        primaryStage.setTitle("Lab 08");
 
         table = new TableView<>();
         table.setItems(DataSource.getAllMarks());
